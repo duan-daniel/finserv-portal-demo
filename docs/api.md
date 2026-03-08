@@ -4,7 +4,12 @@
 
 ### GET /api/issues
 
-Returns all issues.
+Returns a paginated list of issues.
+
+**Query parameters:**
+
+- `search` *(optional)* — filters issues by search text
+- `page` *(optional)* — 1-based page number
 
 **Response:**
 
@@ -17,11 +22,14 @@ Returns all issues.
       "status": "open",
       "priority": "high"
     }
-  ]
+  ],
+  "total": 1,
+  "totalPages": 1,
+  "page": 1
 }
 ```
 
-> **Note:** This endpoint serves the full list of issues.
+> **Note:** This endpoint supports filtering and returns pagination metadata.
 
 ---
 
@@ -37,6 +45,9 @@ Returns customer details by ID.
 {
   "id": "C001",
   "name": "Acme Financial Corp",
-  "tier": "enterprise"
+  "email": "ops@acme.test",
+  "tier": "enterprise",
+  "balance": 120000,
+  "createdAt": "2024-01-15"
 }
 ```
