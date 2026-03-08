@@ -19,9 +19,7 @@ describe("filterIssues", () => {
     expect(result[0].title).toBe("Payment processing timeout");
   });
 
-  // This test documents the bug — it currently FAILS because
-  // search is case-sensitive (Issue 1)
-  it.skip("should be case-insensitive", () => {
+  it("is case-insensitive", () => {
     const upper = filterIssues(mockIssues, "Payment");
     const lower = filterIssues(mockIssues, "payment");
     expect(upper).toEqual(lower);

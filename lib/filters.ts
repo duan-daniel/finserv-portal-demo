@@ -6,9 +6,12 @@ export function filterIssues(
   items: Array<{ title: string; status: string }>,
   query: string
 ) {
-  if (!query.trim()) return items;
-  // BUG: case-sensitive comparison — searching "payment" won't match "Payment"
-  return items.filter((item) => item.title.includes(query));
+  const normalizedQuery = query.trim().toLowerCase();
+  if (!normalizedQuery) return items;
+
+  return items.filter((item) =>
+    item.title.toLowerCase().includes(normalizedQuery)
+  );
 }
 
 /**
