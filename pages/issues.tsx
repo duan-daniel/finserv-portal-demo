@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import SearchBox from "../components/SearchBox";
 import IssueTable from "../components/IssueTable";
 import Pagination from "../components/Pagination";
+import Spinner from "../components/Spinner";
 
 interface Issue {
   id: number;
@@ -44,13 +45,16 @@ export default function IssuesPage() {
   }
 
   async function handleSync() {
-    // BUG (Issue 4): No loading state — button is not disabled during sync,
-    // no spinner is shown, and users can click repeatedly.
+    if (syncing) return;
+
     setSyncing(true);
-    // Simulate a sync operation
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    await fetchIssues();
-    setSyncing(false);
+    try {
+      // Simulate a sync operation
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await fetchIssues();
+    } finally {
+      setSyncing(false);
+    }
   }
 
   function handleSearchChange(value: string) {
@@ -63,8 +67,20 @@ export default function IssuesPage() {
       <div className="issues-page">
         <div className="page-header">
           <h1>Issues Inbox</h1>
-          <button onClick={handleSync} className="btn btn-primary">
-            Sync Issues
+          <button
+            onClick={handleSync}
+            className="btn btn-primary"
+            disabled={syncing}
+            aria-busy={syncing}
+          >
+            {syncing ? (
+              <>
+                <Spinner />
+                <span>Syncing...</span>
+              </>
+            ) : (
+              "Sync Issues"
+            )}
           </button>
         </div>
 
