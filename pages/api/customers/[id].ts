@@ -6,14 +6,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const customer = customers.find((c) => c.id === id);
 
-  // BUG (Issue 3): No null check — accessing properties on undefined
-  // throws a 500 instead of returning a 404.
+  if (!customer) {
+    return res.status(404).json({ error: "Customer not found" });
+  }
+
   res.status(200).json({
-    id: customer!.id,
-    name: customer!.name,
-    email: customer!.email,
-    tier: customer!.tier,
-    balance: customer!.balance,
-    createdAt: customer!.createdAt,
+    id: customer.id,
+    name: customer.name,
+    email: customer.email,
+    tier: customer.tier,
+    balance: customer.balance,
+    createdAt: customer.createdAt,
   });
 }
