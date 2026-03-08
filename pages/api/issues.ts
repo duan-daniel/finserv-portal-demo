@@ -11,22 +11,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const searchQuery = typeof search === "string" ? search : "";
   const pageNum = typeof page === "string" ? parseInt(page, 10) : 1;
 
-  // Filter issues by search query
   const filtered = filterIssues(allIssues, searchQuery);
+  const paginated = paginate(filtered, pageNum, PAGE_SIZE);
 
-  // BUG (Issue 2): We paginate using `allIssues` instead of `filtered`,
-  // so the total count is wrong after filtering.
-  // The displayed rows come from `filtered` but pagination metadata uses `allIssues`.
-  const paginatedAll = paginate(allIssues, pageNum, PAGE_SIZE);
-  const paginatedDisplay = filtered.slice(
-    (pageNum - 1) * PAGE_SIZE,
-    pageNum * PAGE_SIZE
-  );
-
-  res.status(200).json({
-    items: paginatedDisplay,
-    total: paginatedAll.total,
-    totalPages: paginatedAll.totalPages,
-    page: pageNum,
-  });
+  res.status(200).json(paginated);
 }
