@@ -4,7 +4,11 @@
 
 ### GET /api/issues
 
-Returns all issues.
+Returns paginated issues with optional search.
+
+**Query params:**
+- `search` *(optional)* – substring match on issue title.
+- `page` *(optional, default: 1)* – 1-based page number (page size: 5).
 
 **Response:**
 
@@ -17,11 +21,17 @@ Returns all issues.
       "status": "open",
       "priority": "high"
     }
-  ]
+  ],
+  "total": 12,
+  "totalPages": 3,
+  "page": 1
 }
 ```
 
-> **Note:** This endpoint serves the full list of issues.
+Example:
+```
+GET /api/issues?search=payment&page=2
+```
 
 ---
 
